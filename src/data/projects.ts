@@ -5,16 +5,110 @@ export const projects: Project[] = [
     slug: "farrier-fleet",
     name: "Farrier Fleet",
     category: "Mobile business management",
+    tagline: "An offline-first iOS business-management app for working farriers.",
     summary:
-      "A mobile app helping farriers manage clients, horses, appointments, work records, photos, and invoices.",
+      "A mobile app helping farriers manage clients, horses, appointments, and work records.",
     overview:
       "Farrier Fleet brings the day-to-day work of a farrier into one practical system, reducing paperwork and making client and horse histories easier to manage.",
-    technologies: ["React Native", "TypeScript", "Expo", "Supabase"],
+    introduction: [
+      "Farrier Fleet is designed around the practical problems of running a farriery business: keeping track of horses, planning upcoming work, maintaining useful hoof records, and reducing the administration around appointments.",
+      "Farriers can see which horses are due each week and plan the shoes and equipment they will need in advance. Each horse has a history of visits, shoeing details, notes and hoof photos, allowing changes in hoof condition to be followed over months or years. Common tasks are kept quick, including sending appointment reminders to clients in a couple of taps and rescheduling appointments directly from the calendar.",
+      "The app is live on the App Store and is currently used regularly by around five working farriers.",
+    ],
+    technologies: ["React Native", "TypeScript", "Expo", "SQLite", "Supabase"],
     features: [
       "Client and horse records",
       "Appointment scheduling",
       "Visit notes and photos",
       "Invoices and follow-up reminders",
+    ],
+    cardImages: [
+      {
+        src: "images/farrier-fleet/hub.png",
+        alt: "Farrier Fleet hub showing overdue, current, and upcoming appointments",
+        caption: "Your day, organised",
+      },
+      {
+        src: "images/farrier-fleet/horse_details.png",
+        alt: "Farrier Fleet horse record with shoeing details and hoof photographs",
+        caption: "Track each horse over time",
+      },
+    ],
+    images: [
+      {
+        src: "images/farrier-fleet/hub.png",
+        alt: "Farrier Fleet hub showing overdue, current, and upcoming appointments",
+        caption: "Your day, organised",
+      },
+      {
+        src: "images/farrier-fleet/calendar.png",
+        alt: "Farrier Fleet calendar with monthly and daily appointment views",
+        caption: "See your schedule clearly",
+      },
+      {
+        src: "images/farrier-fleet/plan_week.png",
+        alt: "Farrier Fleet weekly plan summarising appointments, horses, hours, and shoes",
+        caption: "Plan the week ahead",
+      },
+      {
+        src: "images/farrier-fleet/clients_details.png",
+        alt: "Farrier Fleet client record grouping visits and horses",
+        caption: "Keep clients and horses together",
+      },
+      {
+        src: "images/farrier-fleet/horse_details.png",
+        alt: "Farrier Fleet horse record with shoeing details and hoof photographs",
+        caption: "Track each horse over time",
+      },
+      {
+        src: "images/farrier-fleet/log_work.png",
+        alt: "Farrier Fleet visit form for logging completed work and the next appointment",
+        caption: "Log work as you go",
+      },
+    ],
+    caseStudy: [
+      {
+        heading: "Offline-first architecture",
+        paragraphs: [
+          "Farriers frequently work at yards and rural properties where reliable mobile reception cannot be assumed. I therefore designed Farrier Fleet around a local SQLite database rather than requiring a server connection for normal use.",
+          "The relational data model connects clients, horses, appointments, visits, shoeing records and photos, allowing the application to maintain both the current state of a farrier's business and a long-term history for each horse.",
+          "Core workflows remain available without an internet connection, while Supabase is used to synchronise data between devices when connectivity is available.",
+        ],
+      },
+      {
+        heading: "Simplifying onboarding",
+        paragraphs: [
+          "An earlier version of Farrier Fleet geocoded client addresses using the Google Maps API. I built a small FastAPI backend to handle this, collecting driving times between clients, with the longer-term goal of using location data optimise a farrier's route between appointments.",
+          "In practice, geocoding created a more immediate problem. Creating a client now depended on an internet connection, and failed or interrupted requests could leave clients without complete address data. This introduced friction into one of the most important onboarding workflows for a feature that may save an hour a week but would also require much more upfront work to correctly onboard and also requiring a large amount of trust in the app.",
+          "I decided that reliable, fast client creation was more important than preserving the route optimisation roadmap. I removed geocoding from onboarding and, because geocoding was the reason the separate FastAPI service existed, removed the backend with it.",
+          "The resulting architecture was simpler and eliminated an unnecessary network dependency from client creation. It also reinforced an important product lesson: a potentially sophisticated future feature was not worth compromising a basic workflow that every user needed immediately.",
+        ],
+      },
+      {
+        heading: "Modelling the farriery domain",
+        paragraphs: [
+          "A large part of the project has been working out how the information in a farrier's business fits together.",
+          "A farrier needs to know what is happening next week, which horses are due, where they are going and which shoes they need, while also maintaining records that remain useful over the lifetime of a horse.",
+          "The data model therefore needs to connect short-term scheduling with long-term horse history. Visits record what happened at a particular appointment, while shoeing information, notes and photographs allow a farrier to look backwards and understand how a horse's hoofs have changed over time.",
+          "Designing around these relationships has been more important than simply adding individual features: the usefulness of the app depends on information entered during everyday work becoming useful again weeks or months later.",
+        ],
+      },
+      {
+        heading: "Designing for use in the field",
+        paragraphs: [
+          "The key to Farrier Fleet has been decreasing the number of taps to perform each key action.",
+          "Appointment reminders can be prepared and sent in a couple of taps, appointments can be moved directly around the calendar, and upcoming horses can be reviewed together when planning shoes and equipment for the week.",
+          "Importantly, the user may open the camera from the hub screen in one tap and assign the photos later after working, with the app predicting which customer the photo belongs to based on the time the photo was taken.",
+        ],
+      },
+      {
+        heading: "Shipping and maintaining the product",
+        paragraphs: [
+          "I designed and built Farrier Fleet independently based on requests from farriers in western North Carolina, from the initial data model through to production release.",
+          "This included subscription handling with RevenueCat, EAS production builds and the App Store review and release process.",
+          "Development has continued after release. Having people use the application in their actual businesses has exposed problems and trade offs that were difficult to anticipate while building the first version, and has led to both new features and the deliberate removal of unnecessary complexity.",
+        ],
+      },
     ],
   },
   {
@@ -37,16 +131,148 @@ export const projects: Project[] = [
     slug: "beginners-mind",
     name: "The Beginner’s Mind",
     category: "Meditation and personal analytics",
+    tagline:
+      "A meditation timer and tracking app built to make it easy to understand patterns in a meditation practice.",
     summary:
       "A meditation tracker combining customizable timers, reflection logging, reviews, and personal trend analysis.",
     overview:
       "The Beginner’s Mind helps meditators understand their practice over time instead of only counting minutes or maintaining a streak.",
-    technologies: ["React Native", "TypeScript", "Expo", "SQLite", "Supabase"],
+    introduction: [
+      "I originally built The Beginner's Mind for myself and a small group of friends practising meditation, particularly samatha-style practice.",
+      "Most meditation apps are good at recording how long somebody sits and providing guided meditations. I wanted something more self exploratory. It should be able to track what actually happens during a practice: how the sit felt, how attention behaved, and the influences surrounding it. The aim was to make this simple and intuitive to record after every sit, then create a data analysis platform exploring how influences such as caffeine, sleep quality, time of day, or others affect different qualities.",
+      "Users can create sit presets, use interval bells, record notes and practice metrics after a sit, track influences from daily life, and review how their practice changes over time.",
+      "The app is currently available to testers through TestFlight and is approaching a public App Store release.",
+    ],
+    callToAction: {
+      before: "Interested in testing The Beginner's Mind? ",
+      linkLabel: "Email me",
+      href: "mailto:simongfleet@gmail.com?subject=The%20Beginner%27s%20Mind%20TestFlight",
+      after: " to join the TestFlight beta.",
+    },
+    technologies: [
+      "React Native",
+      "TypeScript",
+      "SQLite",
+      "Drizzle",
+      "Supabase",
+      "Expo",
+    ],
     features: [
       "Custom meditation timers and bells",
       "Post-session reflections",
       "Weekly and monthly reviews",
       "Personal trends and comparisons",
+    ],
+    cardImages: [
+      {
+        src: "images/the-beginners-mind/sit_screen.PNG",
+        alt: "The Beginner’s Mind sit screen with meditation presets and practice progress",
+        caption: "Choose a practice",
+      },
+      {
+        src: "images/the-beginners-mind/trends_overview.PNG",
+        alt: "The Beginner’s Mind trends overview showing practice statistics and personal insights",
+        caption: "Understand practice patterns",
+      },
+    ],
+    images: [
+      {
+        src: "images/the-beginners-mind/sit_screen.PNG",
+        alt: "The Beginner’s Mind sit screen with meditation presets and practice progress",
+        caption: "Choose a practice",
+      },
+      {
+        src: "images/the-beginners-mind/timer_screen.PNG",
+        alt: "The Beginner’s Mind active meditation timer with breathing prompt",
+        caption: "A focused meditation timer",
+      },
+      {
+        src: "images/the-beginners-mind/record_sit_influences.PNG",
+        alt: "The Beginner’s Mind session details form for recording quality and influences",
+        caption: "Record the conditions around each sit",
+      },
+      {
+        src: "images/the-beginners-mind/weekly_review.PNG",
+        alt: "The Beginner’s Mind weekly review with a written practice summary and reflection prompt",
+        caption: "Reflect with weekly reviews",
+      },
+      {
+        src: "images/the-beginners-mind/trends_overview.PNG",
+        alt: "The Beginner’s Mind trends overview showing practice statistics and personal insights",
+        caption: "See what stands out",
+      },
+      {
+        src: "images/the-beginners-mind/trends_vs_influences.PNG",
+        alt: "The Beginner’s Mind trends explorer comparing meditation quality with personal influences",
+        caption: "Explore relationships in the data",
+      },
+    ],
+    caseStudy: [
+      {
+        heading: "Making detailed tracking quick enough to use",
+        paragraphs: [
+          "The usefulness of the app depends on people actually recording their sits consistently.",
+          "I therefore wanted the tracking system to capture substantially more information than a normal meditation timer without turning the end of every sit into a long form.",
+          "Users can define the qualities of practice they care about and the influences they want to track rather than being restricted to a fixed set chosen by the app. Influences such as sleep, caffeine or exercise can carry different kinds of measurements such as hours slept, or quality of sleep (bad, okay, good) or any other measurements of their choice for each influence.",
+        ],
+      },
+      {
+        heading: "A flexible model for personal data",
+        paragraphs: [
+          "The database separates influences, their measurement definitions, and the values recorded for each sit. This allows users to create their own influences and measurements without requiring a different database field for every possible variable.",
+          "Historical records retain the information needed to interpret them even if the user's configuration later changes.",
+        ],
+      },
+      {
+        heading: "Local-first storage and cross-device sync",
+        paragraphs: [
+          "Meditation sessions are stored locally in SQLite through Drizzle, so recording or reviewing a sit does not depend on a network request.",
+          "Changes that need to reach Supabase are placed in a local outbox. The sync layer pushes pending changes when connectivity is available and incrementally pulls newer remote records back into SQLite. Failed writes remain queued rather than being silently lost.",
+          "Synced records use timestamps and soft deletion so that modifications and deletions can propagate between devices.",
+        ],
+      },
+      {
+        heading: "Hiding configuration behind presets",
+        paragraphs: [
+          "A meditation can have several configuration options: duration, timer type, practice mode, bells and interval settings.",
+          "A user can therefore start their normal practice quickly from customisable presets, while still having access to a more detailed custom setup when they want it.",
+          "When a sit begins, its actual configuration is stored with the session. Changing or deleting the preset afterwards therefore does not alter the historical record of what was actually performed.",
+        ],
+      },
+      {
+        heading: "Trends without overstating the data",
+        paragraphs: [
+          "The main reason for collecting the data is to explore patterns in practice.",
+          "The Trends section can compare meditation metrics across variables such as time of day, meditation type and recorded influences, while custom graphs allow different parts of the dataset to be explored directly.",
+          "A minimum sample requirements before automatically surfacing a relationship as noteworthy. Insights take into account both the size of an observed difference and how much data exists behind the comparison.",
+          "If there is not enough evidence to support a useful comparison, the app does not invent one.",
+        ],
+      },
+      {
+        heading: "Weekly and monthly reviews",
+        paragraphs: [
+          "The app also generates weekly and monthly reviews from the user's recorded practice.",
+          "These summarise things such as meditation frequency and duration, compare the current period with the previous one, and surface changes or patterns where the underlying data supports them.",
+          "The reviews are generated deterministically from the recorded statistics rather than being passed to an LLM. This keeps the output tied directly to calculations the application has actually performed and avoids producing convincing-sounding interpretations that are not supported by the data.",
+        ],
+      },
+      {
+        heading: "Protecting an active sit",
+        paragraphs: [
+          "An active meditation and an unfinished post-sit reflection are persisted separately from completed session history.",
+          "This means accidentally closing or restarting the application does not necessarily lose an ongoing sit or an unfinished reflection.",
+          "Persisted state is versioned and validated when restored so that incompatible or malformed state is discarded rather than leaking into the rest of the application.",
+        ],
+      },
+      {
+        heading: "Building it for actual use",
+        paragraphs: [
+          "Because I originally built the app for myself and friends rather than as a portfolio exercise, a lot of the design has been driven by whether it remains convenient after repeated use.",
+          "The central trade-off has been between collecting enough information to make the history genuinely useful and keeping the process lightweight enough that somebody is willing to record every sit.",
+          "That has influenced the use of presets, configurable measurements, local storage and the way trends are surfaced. The aim is not simply to collect as much data as possible, but to make it practical to build a consistent picture of a meditation practice over time and work to change the influences that occur that lead to a bad meditation.",
+          "Independently designed and built for iOS.",
+        ],
+      },
     ],
   },
   {

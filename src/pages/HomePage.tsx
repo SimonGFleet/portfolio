@@ -5,11 +5,10 @@ export function HomePage() {
   return (
     <main>
       <section className="intro">
-        <p className="eyebrow">Software portfolio</p>
-        <h1>I build useful software around real-world problems.</h1>
+        <h2>I build software from ideas through to working products.</h2>
         <p>
-          I’m Simon Fleet. These projects cover mobile products, business
-          operations, personal analytics, and market simulation.
+          I'm Simon Fleet, a software engineer with a maths background working mainly in Python and Typescript.
+          Below is a selection of projects I've built:
         </p>
       </section>
 

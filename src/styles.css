@@ -57,7 +57,7 @@ nav a:hover,
 
 .intro {
   max-width: 780px;
-  padding: 104px 0 88px;
+  padding: 56px 0 72px;
 }
 
 .eyebrow {
@@ -97,18 +97,23 @@ h1 {
 
 .project-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: 28px;
 }
 
 .project-card {
-  padding: 18px 18px 24px;
+  display: grid;
+  grid-template-columns: minmax(240px, 33%) minmax(0, 1fr);
+  gap: 32px;
+  align-items: center;
+  padding: 18px;
   border: 1px solid #dcded8;
   border-radius: 12px;
   background: #fff;
 }
 
 .image-placeholder,
+.project-card-image,
 .project-hero-placeholder {
   display: grid;
   place-items: center;
@@ -117,10 +122,39 @@ h1 {
   border: 1px dashed #bdc3bc;
 }
 
-.image-placeholder {
-  min-height: 240px;
-  margin-bottom: 24px;
+.image-placeholder,
+.project-card-image {
+  min-height: 0;
+  height: 240px;
+  margin-bottom: 0;
   border-radius: 8px;
+}
+
+.project-card-image {
+  overflow: hidden;
+  background: #f5f0e9;
+  border: 1px solid #e4ded6;
+}
+
+.project-card-images {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.project-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 22%;
+}
+
+.project-card-images .project-card-image:nth-child(2) img {
+  object-position: center 68%;
+}
+
+.project-card-info {
+  padding: 12px 18px 12px 0;
 }
 
 .project-card h2 {
@@ -128,8 +162,7 @@ h1 {
   font-size: 1.75rem;
 }
 
-.project-card > p:not(.eyebrow) {
-  min-height: 72px;
+.project-card-info > p:not(.eyebrow) {
   color: #59625c;
   line-height: 1.55;
 }
@@ -167,22 +200,112 @@ h1 {
   padding: 72px 0 48px;
 }
 
+.project-tagline {
+  margin-bottom: 18px;
+  color: #17211b;
+  font-size: 1.3rem;
+  font-weight: 650;
+  line-height: 1.45;
+}
+
+.project-overview {
+  max-width: 720px;
+  color: #59625c;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.project-introduction {
+  max-width: 760px;
+}
+
+.project-introduction p {
+  color: #59625c;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.project-introduction p:last-child {
+  margin-bottom: 0;
+}
+
+.project-cta {
+  margin: -24px 0 56px;
+  color: #59625c;
+  line-height: 1.6;
+}
+
+.project-cta a {
+  color: #28573f;
+  font-weight: 650;
+}
+
+.project-status {
+  margin: -22px 0 56px;
+  color: #59625c;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
 .project-hero-placeholder {
   min-height: 440px;
   border-radius: 12px;
 }
 
-.project-details {
-  display: grid;
-  grid-template-columns: 1.5fr 1fr;
-  gap: 80px;
-  padding: 64px 0;
+.project-gallery {
+  padding: 8px 0 24px;
 }
 
-.feature-list {
-  padding-left: 20px;
-  color: #465049;
-  line-height: 2;
+.project-gallery > h2 {
+  margin-bottom: 24px;
+  font-size: 1.75rem;
+}
+
+.project-gallery-grid {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  padding: 4px 4px 24px;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scrollbar-color: #aeb5b0 #eef1ec;
+}
+
+.project-gallery figure {
+  flex: 0 0 clamp(240px, 29%, 300px);
+  margin: 0;
+  scroll-snap-align: start;
+}
+
+.project-gallery a {
+  display: block;
+  overflow: hidden;
+  background: #f5f0e9;
+  border: 1px solid #e4ded6;
+  border-radius: 10px;
+}
+
+.project-gallery a:hover,
+.project-gallery a:focus-visible {
+  outline: 2px solid #28573f;
+  outline-offset: 3px;
+}
+
+.project-gallery img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.project-gallery figcaption {
+  padding: 12px 2px 0;
+  color: #59625c;
+  font-size: 0.9rem;
+  font-weight: 650;
+}
+
+.project-details {
+  padding: 48px 0;
 }
 
 .work-note {
@@ -191,6 +314,31 @@ h1 {
   color: #68716b;
   border-top: 1px solid #dcded8;
   line-height: 1.6;
+}
+
+.case-study {
+  border-top: 1px solid #dcded8;
+}
+
+.case-study-section {
+  max-width: 760px;
+  padding: 52px 0;
+  border-bottom: 1px solid #dcded8;
+}
+
+.case-study-section h2 {
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+  line-height: 1.2;
+}
+
+.case-study-section p {
+  color: #4f5952;
+  line-height: 1.75;
+}
+
+.case-study-section p:last-child {
+  margin-bottom: 0;
 }
 
 footer {
@@ -206,16 +354,42 @@ footer {
   }
 
   .intro {
-    padding: 72px 0 64px;
+    padding: 40px 0 56px;
   }
 
   .project-grid,
-  .project-details {
+  .case-study-section {
     grid-template-columns: 1fr;
   }
 
-  .project-details {
-    gap: 28px;
+  .project-card {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .image-placeholder {
+    height: auto;
+  }
+
+  .project-card-image {
+    height: 220px;
+  }
+
+  .project-card-info {
+    padding: 0 6px 6px;
+  }
+
+  .project-gallery-grid {
+    gap: 16px;
+    margin-right: -14px;
+  }
+
+  .project-gallery figure {
+    flex-basis: min(78vw, 320px);
+  }
+
+  .case-study-section {
+    padding: 48px 0;
   }
 
   .project-card > p:not(.eyebrow) {
