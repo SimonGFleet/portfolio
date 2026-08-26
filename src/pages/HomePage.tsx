@@ -7,7 +7,7 @@ export function HomePage() {
       <section className="intro">
         <h2>I build software from ideas through to working products.</h2>
         <p>
-          I'm Simon Fleet, a software engineer with a maths background working mainly in Python and Typescript.
+          I'm Simon Fleet, a software engineer with a maths background working mainly in Python and TypeScript.
           Below is a selection of projects I've built:
         </p>
       </section>

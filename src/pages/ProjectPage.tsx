@@ -43,7 +43,11 @@ export function ProjectPage() {
       {project.images ? (
         <section className="project-gallery" aria-labelledby="gallery-heading">
           <h2 id="gallery-heading">Inside the app</h2>
-          <div className="project-gallery-grid">
+          <div
+            className={`project-gallery-grid ${
+              project.slug === "window" ? "window-gallery-grid" : ""
+            }`}
+          >
             {project.images.map((image) => {
               const imageUrl = `${import.meta.env.BASE_URL}${image.src}`;
 

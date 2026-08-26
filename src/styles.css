@@ -453,6 +453,50 @@ footer {
   font-size: 0.85rem;
 }
 
+/* ---------- Window project gallery ---------- */
+
+/*
+  Window uses landscape application screenshots rather than
+  narrow mobile screenshots.
+
+  Make the main configuration screen full width, then place
+  the BOM and quotation screens side by side underneath.
+*/
+
+.window-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  width: 100%;
+  max-width: 760px;
+  margin: 0;
+  overflow: visible;
+  padding: 4px 0 32px;
+  scroll-snap-type: none;
+}
+
+.window-gallery-grid figure {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+}
+
+/* Main window configuration screenshot */
+.window-gallery-grid figure:first-child {
+  grid-column: 1 / -1;
+}
+
+.window-gallery-grid a {
+  display: block;
+  width: 100%;
+}
+
+.window-gallery-grid img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 /* ---------- Mobile ---------- */
 
 @media (max-width: 720px) {
@@ -546,5 +590,17 @@ footer {
 
   .project-hero-placeholder {
     min-height: 260px;
+  }
+
+    /* Window landscape screenshots stack vertically on mobile. */
+  .window-gallery-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-right: 0;
+    padding-bottom: 24px;
+  }
+
+  .window-gallery-grid figure:first-child {
+    grid-column: auto;
   }
 }
