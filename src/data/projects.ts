@@ -2,6 +2,123 @@ import type { Project } from "../types";
 
 export const projects: Project[] = [
   {
+  slug: "window",
+  name: "Window Quotation and Ordering Platform",
+  category: "Window quoting & ordering",
+  tagline:
+    "A B2B system for turning window surveys into fabrication requirements and accurate quotations.",
+  summary:
+    "A surveying and quotation platform that converts configurable window designs into bills of materials, manufacturing dimensions and prices.",
+  overview:
+    "A B2B platform for window surveyors, fitters and suppliers, connecting on-site window configuration with fabrication calculations, supplier catalogues and customer quotations.",
+  introduction: [
+    "I worked on this project as a cofounder and engineer alongside a former window-fabrication CEO, building software for window surveyors, fitters and suppliers.",
+    "The aim was to replace a fragmented process where measurements, product configuration, material requirements and pricing were handled across separate systems. A surveyor could configure a window on site, while the software translated that configuration into the materials and dimensions required to manufacture it and ultimately into a customer quotation.",
+    "The product included a field application for surveying and quoting alongside a web portal for maintaining products, materials, prices and manufacturing rules.",
+  ],
+  technologies: [
+    "React Native",
+    "TypeScript",
+    "PostgreSQL",
+    "SQLite",
+    "Drizzle",
+    "Supabase",
+  ],
+  features: [
+    "Configurable window geometry",
+    "Nine-stage BOM calculation",
+    "Supplier catalogues and pricing",
+    "Offline-first surveying",
+  ],
+  cardImages: [
+      {
+        src: "images/window/survey_design.png",
+        alt: "Window survey screen showing a configurable frame with mullions, transoms, opening sections and dimensions",
+        caption: "Configure the window geometry",
+      },
+    ],
+    images: [
+      {
+        src: "images/window/survey_design.png",
+        alt: "Window survey screen showing a configurable frame with mullions, transoms, opening sections and dimensions",
+        caption: "Configure the window geometry",
+      },
+      {
+        src: "images/window/bom.png",
+        alt: "Bill of materials showing frame sections, cut lengths, reinforcement and glass dimensions",
+        caption: "Generate fabrication requirements",
+      },
+      {
+        src: "images/window/survey_overview.png",
+        alt: "Window quotation screen showing multiple configured windows and manufacturer, fitter and customer pricing",
+        caption: "Turn the survey into a quotation",
+      },
+    ],
+  caseStudy: [
+    {
+      heading: "Modelling window geometry and topology",
+      paragraphs: [
+        "One of the main challenges was representing the geometry of a window in a way that could support arbitrary layouts.",
+        "A window can contain mullions and transoms which divide the original frame into smaller regions, and those regions can themselves be divided again. Individual sections can then be fixed, opening, or contain additional internal members.",
+        "I represented this as a path-addressed tree of regions. The entire window begins as one rectangle, and successive divider stages split particular regions into new children. This allowed complex layouts to be represented without defining a separate data structure for every possible window design.",
+        "The topology layer then analyses the regions on either side of dividers, finds intersections, splits members into individual pieces and determines which profile form is required for each section. The geometry engine also rejects invalid divider positions, duplicate divisions and impossible layouts before they reach the fabrication calculations.",
+      ],
+    },
+    {
+      heading: "Turning a survey into a bill of materials",
+      paragraphs: [
+        "The most substantial part of the project was a deterministic BOM engine that converts a surveyed window into the components needed to manufacture it.",
+        "The calculation runs through nine stages: cill, add-ons, outer frame, mullions and transoms, sash profiles, internal members, reinforcement, hardware, and glass and glazing bead.",
+        "Each stage receives the geometry produced by the previous stage, calculates the relevant components and dimensions, and passes the remaining usable geometry forward.",
+        "The resulting BOM contains fabrication information including profile cut lengths, glass dimensions, reinforcement, hardware and quantities.",
+        "Keeping the calculation separate from the interface meant the same window configuration could be displayed visually, priced and tested against the underlying BOM without duplicating the manufacturing logic.",
+      ],
+    },
+    {
+      heading: "Supplier catalogues and product rules",
+      paragraphs: [
+        "The field application was designed to work from product information maintained by suppliers and manufacturers.",
+        "A separate web portal allowed catalogue information such as profiles, styles, materials, prices and reinforcement rules to be configured centrally and then consumed by the surveying application through Supabase Edge Functions.",
+        "I separated reusable supplier definitions from customer-specific windows. A supplier style provides the starting configuration for a window, while the surveyor can modify its dimensions and divider geometry for the particular installation.",
+        "Supplier rules can then be applied to the configured window when calculating materials and reinforcement requirements.",
+      ],
+    },
+    {
+      heading: "Local-first surveying and synchronisation",
+      paragraphs: [
+        "Surveying often happens on building sites where reliable internet access cannot be assumed, so the mobile application was designed to work offline.",
+        "Changes are written to SQLite first and queued for synchronisation with Supabase when a connection is available. Local changes and their pending sync operations are written together, so a successful local update cannot be lost simply because the network request fails.",
+        "Incoming records are imported transactionally and compared using update timestamps before being applied, keeping the core surveying workflow independent of the network while using a relatively simple conflict model.",
+      ],
+    },
+    {
+      heading: "From BOM to quotation",
+      paragraphs: [
+        "Once the BOM has been generated, its materials can be resolved against fabricator price lists. Supplier and fitter mark-ups, installation charges, order-level adjustments and VAT are then applied.",
+        "Prices are stored and calculated in pence rather than using floating-point values, with rounding performed at defined stages so that individual window prices remain consistent with the final order total.",
+      ],
+    },
+    {
+      heading: "Keeping issued quotations stable",
+      paragraphs: [
+        "Supplier prices can change after a quotation has been produced, but an issued quote should not silently change with them.",
+        "When a quote is issued, the calculated manufacturer, fitter and customer prices are stored against the order and its individual windows.",
+        "Subsequent catalogue price changes therefore cannot alter an existing quotation. Returning the order to draft clears those stored prices and allows the quote to be recalculated.",
+      ],
+    },
+    {
+      heading: "Evolving the architecture",
+      paragraphs: [
+        "The project went through several iterations as the domain became better understood.",
+        "An earlier implementation covered a very broad workflow including surveys, quotations, payments, factory release and installation. As the project developed, I concentrated on building the most sensitive parts: window modelling, fabrication calculations, pricing and offline persistence, with clearer separation between domain logic and the interface.",
+        "The newer calculation layer is covered by extensive automated tests across geometry, BOM stages, pricing, repositories and synchronisation.",
+        "This evolution was one of the most useful parts of the project: understanding the domain well enough to identify which parts needed flexible configuration and which parts needed deterministic, heavily tested software.",
+        "The project was ultimately paused before a full commercial launch, but by that point the core window modelling, BOM, pricing and offline architecture had been built and tested.",
+      ],
+    },
+  ],
+},
+  {
     slug: "farrier-fleet",
     name: "Farrier Fleet",
     category: "Mobile business management",
@@ -111,22 +228,7 @@ export const projects: Project[] = [
       },
     ],
   },
-  {
-    slug: "window",
-    name: "Window",
-    category: "Window quoting & ordering",
-    summary:
-      "A system for designing, pricing, surveying, and managing made-to-measure window orders.",
-    overview:
-      "Window connects the sales and manufacturing sides of custom window orders, from the first customer details through design, pricing, survey, and approval.",
-    technologies: ["React", "React Native", "TypeScript", "SQLite", "Supabase"],
-    features: [
-      "Visual window configuration",
-      "Quotes and commercial pricing",
-      "Survey and order workflows",
-      "Offline-first mobile data",
-    ],
-  },
+  
   {
     slug: "beginners-mind",
     name: "The Beginner’s Mind",
