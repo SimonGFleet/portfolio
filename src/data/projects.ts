@@ -279,16 +279,98 @@ export const projects: Project[] = [
     slug: "order-book",
     name: "Order Book Simulator",
     category: "Market microstructure research",
+    tagline:
+      "Agent-based market simulator built around a central limit order book.",
     summary:
-      "A simulation for exploring order matching, trading agents, market-making strategies, inventory, and P&L.",
+      "A Python simulation for exploring order matching, trading agents, market making, inventory and P&L.",
     overview:
       "The simulator models how orders interact in a market and provides a controlled environment for testing trading agents and market-making ideas.",
-    technologies: ["Python", "Jupyter", "Simulation", "Data analysis"],
+    introduction: [
+      "I built this project to understand how electronic markets work at a lower level than simply scraping price data and testing trading strategies. I wanted to build the mechanism that creates the market itself, then introduce agents with different strategies and eventually different latencies to explore how those differences affect P&L.",
+      "The simulator contains a central limit order book, agents with independent strategies, account settlement and analytics for tracking both market behaviour and individual agent performance."
+    ],
+      technologies: ["Python", "Jupyter", "Simulation", "Data analysis"],
     features: [
       "Limit and market order matching",
       "Multiple trading agents",
       "Inventory and cash tracking",
       "Market and agent analytics",
+    ],
+    cardImages: [
+      {
+        src: "images/order-book/MarketMicrostructureSimulation.png",
+        alt: "Example simulation of 10 random traders vs one market maker",
+        caption: "Example simulation of 10 random traders vs one market maker",
+      },
+    ],
+    images: [
+      {
+        src: "images/order-book/MarketMicrostructureSimulation.png",
+        alt: "Example simulation of 10 random traders vs one market maker",
+        caption: "Example simulation of 10 random traders vs one market maker",
+      },
+    ],
+    caseStudy: [
+      {
+        heading: "Building the matching engine",
+        paragraphs: [
+          "I built the limit order book from scratch rather than using an existing trading library.",
+          "Buy and sell orders are grouped by price, with a queue at each price level preserving FIFO priority. Incoming orders match against the best available price first and can execute across multiple price levels until filled or until a limit price prevents further execution.",
+          "The engine supports market and limit orders, partial fills and cancellations. Any unfilled portion of a limit order is left resting in the book, while market orders do not remain on the book.",
+        ],
+      },
+      {
+        heading: "Separation of market mechanics and agent behaviour",
+        paragraphs: [
+          "The simulation is divided into separate layers for the order book, agents, strategies and settlement.",
+          "At each timestep, agents inspect the current market and their own state before asking their strategy what action to take. A strategy can place an order, cancel an existing order or do nothing.",
+          "These requests are then processed by the simulation, while the order book itself remains responsible only for matching and cancelling orders.",
+        ],
+      },
+      {
+        heading: "Preventing agents from spending assets twice",
+        paragraphs: [
+          "One problem I ran into was that an agent's current cash or inventory is not necessarily the amount it is free to use.",
+          "For example, an agent with £1,000 could place several outstanding buy orders which individually cost less than £1,000 but together commit more money than the agent actually owns.",
+          "I therefore track both the agent's actual balances and its available cash and inventory. Capital committed to an open buy order is reserved immediately, as is inventory committed to a sell order. Cancelling an order releases the reservation, while executed trades are settled into the agent's actual cash and position.",
+          "Market buy orders are also given an explicit spending budget so they cannot consume more liquidity than the submitting agent can afford as they move through different price levels.",
+        ],
+      },
+      {
+        heading: "Agent strategies and emergent behaviour",
+        paragraphs: [
+          "The simulator currently includes configurable random trading agents and a simple market-making strategy.",
+          "Random agents can buy, sell, wait or cancel existing orders, with configurable probabilities, order sizes and price deviations. This provides a controllable source of order flow against which to test other strategies.",
+          "The naive market maker attempts to maintain limit orders on both sides of the market around the current best prices.",
+          "Running these agents together already produces interesting emergent behaviour. Prices move as agents compete for limited liquidity, spreads fluctuate over time, and the naive market maker can accumulate a substantial directional inventory despite continually quoting both sides of the market.",
+          "The figure above shows one 10,000 step simulation with ten random agents and one naive market maker. In this run the market maker gradually builds a large long position, providing a useful baseline for developing a market maker that adjusts its behaviour according to its existing inventory.",
+        ],
+      },
+      {
+        heading: "Testing correctness with system invariants",
+        paragraphs: [
+          "A simulator can produce convincing-looking graphs while still containing incorrect accounting, so I have put particular emphasis on testing the mechanics underneath the output.",
+          "Pytest covers behaviour including FIFO execution, partial fills, crossing and non-crossing limit orders, cancellations, market-order budgeting, open-order tracking and restoration of reserved capital.",
+          "I also test global invariants across longer multi-agent simulations. Total cash and total stock must remain constant: trades can transfer assets between agents, but the simulator must never create or destroy either.",
+        ],
+      },
+      {
+        heading: "Recording the market",
+        paragraphs: [
+          "The simulation records snapshots of both the market and every agent at each timestep.",
+          "Market snapshots include the best bid and ask, midprice, spread and trade count. Agent snapshots track cash, inventory, available cash and inventory, estimated wealth and P&L.",
+          "This makes it possible to analyse both the behaviour that emerges at the market level and what is happening to an individual strategy underneath it.",
+        ],
+      },
+      {
+        heading: "Limitations and next steps",
+        paragraphs: [
+          "The simulator is deliberately still a simplified market rather than an attempt to reproduce a particular real exchange.",
+          "Agent requests are currently randomly shuffled before execution at each timestep rather than being processed using an explicit latency model. I intend to add controlled latency so I can compare otherwise similar agents and measure how execution priority affects their performance.",
+          "My next area of work is inventory aware market making: adjusting how aggressively an agent buys and sells depending on the proportion of its wealth already held as inventory. The increasing position of the naive market maker provides a direct baseline against which to test whether this improves inventory control.",
+          "I also plan to add more sophisticated trading strategies so that the simulator can produce richer and more realistic interactions between agents.",
+        ]
+      }
     ],
   },
 ];
